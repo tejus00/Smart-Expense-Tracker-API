@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Expense</title>
+
+    <style>
+        body{
+            font-family:Arial;
+            background:#f4f4f4;
+        }
+
+        .container{
+            width:400px;
+            margin:60px auto;
+            background:white;
+            padding:25px;
+            border-radius:10px;
+            box-shadow:0 0 10px gray;
+            text-align:center;
+        }
+
+        input{
+            width:90%;
+            padding:10px;
+            margin:10px;
+        }
+
+        button{
+            padding:10px 20px;
+            background:red;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:darkred;
+        }
+
+        #message{
+            margin-top:15px;
+            font-weight:bold;
+        }
+
+        a{
+            text-decoration:none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Delete Expense</h2>
+
+<input type="number" id="expenseId" placeholder="Enter Expense ID">
+
+<br>
+
+<button onclick="deleteExpense()">Delete</button>
+
+<p id="message"></p>
+
+<br>
+
+<a href="/">
+    <button style="background:#007BFF;">Back to Home</button>
+</a>
+
+</div>
+
+<script>
+
+function deleteExpense(){
+
+    let id=document.getElementById("expenseId").value;
+
+    if(id==""){
+        alert("Enter Expense ID");
+        return;
+    }
+
+    fetch("/expenses/"+id,{
+        method:"DELETE"
+    })
+
+    .then(res=>res.json())
+
+    .then(data=>{
+
+        if(data.error){
+            document.getElementById("message").innerHTML=
+            "<span style='color:red;'>"+data.error+"</span>";
+        }
+        else{
+            document.getElementById("message").innerHTML=
+            "<span style='color:green;'>Expense Deleted Successfully</span>";
+
+            document.getElementById("expenseId").value="";
+        }
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

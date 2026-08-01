@@ -1,0 +1,38 @@
+import sys
+import os
+
+# Add the parent directory (D:\delight) to Python's module search path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from src.app import app
+
+app.config["TESTING"] = True
+client = app.test_client()
+
+
+def test_home():
+    response = client.get("/")
+    assert response.status_code == 200
+
+
+def test_get_expenses():
+    response = client.get("/expenses")
+    assert response.status_code == 200
+
+
+def test_total():
+    response = client.get("/expenses/total")
+    assert response.status_code == 200
+
+
+def test_group():
+    response = client.get("/expenses/group")
+    assert response.status_code == 200
+
+
+if __name__ == "__main__":
+    test_home()
+    test_get_expenses()
+    test_total()
+    test_group()
+    print("All tests passed!")

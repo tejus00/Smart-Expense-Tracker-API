@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Expense</title>
+
+    <style>
+        body{
+            font-family:Arial;
+            background:#f4f4f4;
+        }
+
+        .container{
+            width:450px;
+            margin:50px auto;
+            background:white;
+            padding:25px;
+            border-radius:10px;
+            box-shadow:0 0 10px gray;
+        }
+
+        h2{
+            text-align:center;
+            color:#007BFF;
+        }
+
+        input{
+            width:95%;
+            padding:10px;
+            margin:8px 0;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#007BFF;
+            color:white;
+            border:none;
+            cursor:pointer;
+            font-size:16px;
+        }
+
+        button:hover{
+            background:#0056b3;
+        }
+
+        #message{
+            margin-top:15px;
+            text-align:center;
+            font-weight:bold;
+        }
+
+        a{
+            text-decoration:none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Add Expense</h2>
+
+<form id="expenseForm">
+
+    <input type="number" id="id" placeholder="Expense ID" required>
+
+    <input type="text" id="title" placeholder="Expense Title" required>
+
+    <input type="number" id="amount" placeholder="Amount" required>
+
+    <input type="text" id="category" placeholder="Category" required>
+
+    <input type="date" id="date" required>
+
+    <button type="submit">Save Expense</button>
+
+</form>
+
+<p id="message"></p>
+
+<br>
+
+<a href="/">
+    <button type="button">Back to Home</button>
+</a>
+
+</div>
+
+<script>
+
+document.getElementById("expenseForm").addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const expense={
+        id:parseInt(document.getElementById("id").value),
+        title:document.getElementById("title").value,
+        amount:parseFloat(document.getElementById("amount").value),
+        category:document.getElementById("category").value,
+        date:document.getElementById("date").value
+    };
+
+    fetch("/expenses",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify(expense)
+    })
+
+    .then(res=>res.json())
+
+    .then(data=>{
+
+        if(data.error){
+            document.getElementById("message").innerHTML =
+            "<span style='color:red;'>"+data.error+"</span>";
+        }
+        else{
+            document.getElementById("message").innerHTML =
+            "<span style='color:green;'>Expense Added Successfully!</span>";
+
+            document.getElementById("expenseForm").reset();
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
